@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
+	"image/color"
 	"log"
 )
 
@@ -17,6 +18,13 @@ func update(screen *ebiten.Image) error {
 		return nil
 	}
 
+	screen.Fill(color.RGBA{
+		R: 255,
+		G: 0,
+		B: 0,
+		A: 255,
+	})
 	ebitenutil.DebugPrint(screen, "Hello, world")
+
 	return nil
 }
