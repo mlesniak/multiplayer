@@ -5,6 +5,7 @@ import (
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"image/color"
 	"log"
+	"os"
 )
 
 type World struct {
@@ -35,6 +36,11 @@ func main() {
 }
 
 func update(screen *ebiten.Image) error {
+	// Check for key presses.
+	if ebiten.IsKeyPressed(ebiten.KeyEscape) || ebiten.IsKeyPressed(ebiten.KeyQ) {
+		os.Exit(0)
+	}
+
 	// Update state.
 	world.frame++
 	if world.a == 255 || world.a == 0 {
