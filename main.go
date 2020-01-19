@@ -56,7 +56,7 @@ func init() {
 	world.acc = 0
 	world.timer = time.Now()
 
-	tt, err := truetype.Parse(fonts.MPlus1pRegular_ttf)
+	tt, err := truetype.Parse(fonts.ArcadeN_ttf)
 	if err != nil {
 		log.Fatal(err)
 	}
