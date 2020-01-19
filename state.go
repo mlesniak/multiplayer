@@ -66,6 +66,10 @@ func updateState() {
 	state.hs = ebiten.GamepadAxis(0, 2)
 	state.vs = ebiten.GamepadAxis(0, 3)
 
+	// - Simulate gamepad input ----------------------------------------------------------------------
+	state.hs = 1.0
+	// -----------------------------------------------------------------------------------------------
+
 	globalConfig.lineLen = 1000
 	if math.Abs(state.hs) > 0.20 || math.Abs(state.vs) > 0.20 {
 		dx := state.players[0].x + globalConfig.lineLen*state.hs
