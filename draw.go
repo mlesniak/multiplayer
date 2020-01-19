@@ -28,7 +28,7 @@ func draw(screen *ebiten.Image) {
 	w, h := gopherImage.Size()
 	op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
 	//op.GeoM.Rotate(state.angle)
-	op.GeoM.Scale(0.1, 0.1)
+	op.GeoM.Scale(0.3, 0.3)
 	op.GeoM.Translate(state.players[0].x, state.players[0].y)
 	screen.DrawImage(gopherImage, op)
 }
