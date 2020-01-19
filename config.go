@@ -8,6 +8,9 @@ type Config struct {
 
 	// Visual configuration
 	lineLen float64
+
+	// Game rules
+	roundDuration int // in seconds
 }
 
 var globalConfig = Config{
@@ -15,4 +18,6 @@ var globalConfig = Config{
 	height: 800,
 
 	lineLen: 1000,
+
+	roundDuration: 3,
 }

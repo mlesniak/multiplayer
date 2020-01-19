@@ -8,24 +8,21 @@ import (
 )
 
 type State struct {
-	// Position of gopher.
-	x, y       float64
-	ax, ay     float64
-	angle      float64
-	acc        float64
-	accStarted float64
-
-	fullscreen bool
-	timer      time.Time
-
+	// Input
 	hv, vv, hs, vs float64
-	msPassed       int64
+
+	// Player 1
+	x, y  float64
+	angle float64
+
+	// Timing
+	timer    time.Time
+	msPassed int64
 }
 
 var state = State{
 	x:     400,
 	y:     300,
-	acc:   0,
 	timer: time.Now(),
 }
 
@@ -55,14 +52,9 @@ func updateState() {
 	if math.Abs(state.vv) > 0.10 {
 		state.y += state.vv*acc + state.vs
 	}
-	if math.Abs(state.hv) <= 0.10 && math.Abs(state.vv) <= 0.10 {
-		state.accStarted = 0.0
-	} else {
-		state.accStarted += 0.1
-	}
 
 	state.msPassed = time.Now().Sub(state.timer).Milliseconds()
-	if state.msPassed > 5*1000 {
+	if int(state.msPassed) > globalConfig.roundDuration*1000 {
 		state.timer = time.Now()
 	}
 }

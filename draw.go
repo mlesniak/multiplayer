@@ -21,7 +21,7 @@ func draw(screen *ebiten.Image) {
 	msg := fmt.Sprintf("--- %.2f ---", float64(state.msPassed)/1000.0)
 	b, _ := font.BoundString(arcadeFont, msg)
 	a := b.Max.X.Ceil()
-	text.Draw(screen, msg, arcadeFont, globalConfig.width/2-a/2, 20, color.White)
+	text.Draw(screen, msg, arcadeFont, globalConfig.width/2-a/2, 30, color.White)
 
 	op := &ebiten.DrawImageOptions{}
 	w, h := gopherImage.Size()
