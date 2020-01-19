@@ -12,9 +12,9 @@ import (
 
 func draw(screen *ebiten.Image) {
 	if math.Abs(state.hs) > 0.20 || math.Abs(state.vs) > 0.20 {
-		dx := state.x + globalConfig.lineLen*state.hs
-		dy := state.y + globalConfig.lineLen*state.vs
-		ebitenutil.DrawLine(screen, state.x, state.y, dx, dy, color.RGBA{255, 255, 0, 255})
+		dx := state.players[0].x + globalConfig.lineLen*state.hs
+		dy := state.players[0].y + globalConfig.lineLen*state.vs
+		ebitenutil.DrawLine(screen, state.players[0].x, state.players[0].y, dx, dy, color.RGBA{255, 255, 0, 255})
 	}
 
 	ebitenutil.DrawRect(screen, 0, 0, float64(globalConfig.width), 40, color.RGBA{255, 255, 0, 255})
@@ -29,6 +29,6 @@ func draw(screen *ebiten.Image) {
 	op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
 	//op.GeoM.Rotate(state.angle)
 	op.GeoM.Scale(0.1, 0.1)
-	op.GeoM.Translate(state.x, state.y)
+	op.GeoM.Translate(state.players[0].x, state.players[0].y)
 	screen.DrawImage(gopherImage, op)
 }

@@ -11,9 +11,8 @@ type State struct {
 	// Input
 	hv, vv, hs, vs float64
 
-	// Player 1
-	x, y  float64
-	angle float64
+	// Players
+	players []Player
 
 	// Timing
 	timer    time.Time
@@ -21,9 +20,20 @@ type State struct {
 }
 
 var state = State{
-	x:     400,
-	y:     300,
 	timer: time.Now(),
+}
+
+func init() {
+	state.players = make([]Player, 2)
+	pl0 := &state.players[0]
+	pl0.x = 400
+	pl0.y = 200
+	pl0.angle = 0
+}
+
+type Player struct {
+	x, y  float64
+	angle float64
 }
 
 func updateState() {
@@ -40,17 +50,17 @@ func updateState() {
 
 	globalConfig.lineLen = 1000
 	if math.Abs(state.hs) > 0.20 || math.Abs(state.vs) > 0.20 {
-		dx := state.x + globalConfig.lineLen*state.hs
-		dy := state.y + globalConfig.lineLen*state.vs
-		state.angle = math.Atan2(dy-state.y, dx-state.x) + math.Pi/2
+		dx := state.players[0].x + globalConfig.lineLen*state.hs
+		dy := state.players[0].y + globalConfig.lineLen*state.vs
+		state.players[0].angle = math.Atan2(dy-state.players[0].y, dx-state.players[0].x) + math.Pi/2
 	}
 
 	acc := 15.0
 	if math.Abs(state.hv) > 0.10 {
-		state.x += state.hv*acc + state.hs
+		state.players[0].x += state.hv*acc + state.hs
 	}
 	if math.Abs(state.vv) > 0.10 {
-		state.y += state.vv*acc + state.vs
+		state.players[0].y += state.vv*acc + state.vs
 	}
 
 	state.msPassed = time.Now().Sub(state.timer).Milliseconds()
