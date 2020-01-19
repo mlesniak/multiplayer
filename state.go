@@ -20,6 +20,7 @@ type State struct {
 	// Timing
 	timer    time.Time
 	msPassed int64
+	frames   int64
 }
 
 var state = State{
@@ -55,6 +56,8 @@ func init() {
 }
 
 func updateState() {
+	state.frames++
+
 	// Check for key presses.
 	if ebiten.IsKeyPressed(ebiten.KeyEscape) || ebiten.IsKeyPressed(ebiten.KeyQ) {
 		os.Exit(0)
