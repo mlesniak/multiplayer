@@ -16,6 +16,7 @@ type World struct {
 
 	// Position of gopher.
 	x, y       float64
+	angle      float64
 	acc        float64
 	accStarted float64
 
@@ -99,19 +100,18 @@ func update(screen *ebiten.Image) error {
 	lineLen := 1000.0
 	dx := world.x + lineLen*hs
 	dy := world.y + lineLen*vs
-	angle := 0.0
 
 	// Move after check for draw.
 	if math.Abs(hs) > 0.20 || math.Abs(vs) > 0.20 {
-		angle = math.Atan2(dy-world.y, dx-world.x) + math.Pi/2
+		world.angle = math.Atan2(dy-world.y, dx-world.x) + math.Pi/2
 		ebitenutil.DrawLine(screen, world.x, world.y, dx, dy, color.RGBA{255, 255, 0, 255})
 	}
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("hs=%.3g, vs=%.3g, angle=%.3g", hs, vs, angle))
+	ebitenutil.DebugPrint(screen, fmt.Sprintf("hs=%.3g, vs=%.3g, angle=%.3g", hs, vs, world.angle))
 
 	op := &ebiten.DrawImageOptions{}
 	w, h := gopherImage.Size()
 	op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
-	op.GeoM.Rotate(angle)
+	op.GeoM.Rotate(world.angle)
 	//op.GeoM.Rotate(float64(world.frame) * 0.01)
 	op.GeoM.Scale(0.2, 0.2)
 	op.GeoM.Translate(world.x, world.y)
