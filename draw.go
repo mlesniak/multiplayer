@@ -22,9 +22,8 @@ func draw(screen *ebiten.Image) {
 
 	for _, obstacle := range state.obstacles {
 		op := &ebiten.DrawImageOptions{}
-		w, h := obstacleImage.Size()
-		op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
-		op.GeoM.Scale(0.3, 0.3)
+		op.GeoM.Translate(-obstacle.width/2, -obstacle.height/2)
+		//op.GeoM.Scale(0.3, 0.3)
 		op.GeoM.Translate(obstacle.x, obstacle.y)
 		screen.DrawImage(obstacleImage, op)
 	}

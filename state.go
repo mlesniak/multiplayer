@@ -48,8 +48,8 @@ func init() {
 		{
 			x:      600,
 			y:      200,
-			width:  50,
-			height: 50,
+			width:  150,
+			height: 150,
 		},
 	}
 }
