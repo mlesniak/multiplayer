@@ -46,7 +46,7 @@ func init() {
 }
 
 func main() {
-	if err := ebiten.Run(update, 320, 200, 2, "Hello, world!"); err != nil {
+	if err := ebiten.Run(update, 800, 600, 1, "Hello, world!"); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -65,7 +65,7 @@ func update(screen *ebiten.Image) error {
 	// Check for gamepad movement.
 	hv := ebiten.GamepadAxis(0, 0)
 	vv := ebiten.GamepadAxis(0, 1)
-	acc := 10.0
+	acc := 15.0
 	if math.Abs(hv) > 0.10 {
 		world.x += hv * acc
 	}
@@ -96,14 +96,6 @@ func update(screen *ebiten.Image) error {
 		return nil
 	}
 
-	// Draw.
-	screen.Fill(color.RGBA{
-		R: world.a,
-		G: 0,
-		B: 0,
-		A: 255,
-	})
-
 	op := &ebiten.DrawImageOptions{}
 	w, h := gopherImage.Size()
 	op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
@@ -112,7 +104,7 @@ func update(screen *ebiten.Image) error {
 	op.GeoM.Translate(world.x, world.y)
 	screen.DrawImage(gopherImage, op)
 
-	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("0: %0.6f, 1: %0.6f", hv, vv), 0, 12)
+	ebitenutil.DebugPrint(screen, fmt.Sprintf("hs=%g, vs=%g", hs, vs))
 
 	// Move after check for draw.
 	if math.Abs(hs) > 0.20 || math.Abs(vs) > 0.20 {
