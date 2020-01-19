@@ -1,11 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
-	"github.com/hajimehoshi/ebiten/text"
-	"golang.org/x/image/font"
 	"image/color"
 	"math"
 )
@@ -17,12 +14,11 @@ func draw(screen *ebiten.Image) {
 		ebitenutil.DrawLine(screen, state.players[0].x, state.players[0].y, dx, dy, color.RGBA{255, 255, 0, 255})
 	}
 
-	ebitenutil.DrawRect(screen, 0, 0, float64(globalConfig.width), 40, color.RGBA{255, 255, 0, 255})
-
-	msg := fmt.Sprintf("--- %.2f ---", float64(state.msPassed)/1000.0)
-	b, _ := font.BoundString(arcadeFont, msg)
-	a := b.Max.X.Ceil()
-	text.Draw(screen, msg, arcadeFont, globalConfig.width/2-a/2, 30, color.Black)
+	//ebitenutil.DrawRect(screen, 0, 0, float64(globalConfig.width), 40, color.RGBA{255, 255, 0, 255})
+	//msg := fmt.Sprintf("--- %.2f ---", float64(state.msPassed)/1000.0)
+	//b, _ := font.BoundString(arcadeFont, msg)
+	//a := b.Max.X.Ceil()
+	//text.Draw(screen, msg, arcadeFont, globalConfig.width/2-a/2, 30, color.Black)
 
 	op := &ebiten.DrawImageOptions{}
 	w, h := gopherImage.Size()
