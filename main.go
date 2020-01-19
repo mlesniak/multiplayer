@@ -19,7 +19,8 @@ type World struct {
 	acc        float64
 	accStarted float64
 
-	frame int64
+	frame      int64
+	fullscreen bool
 }
 
 var world = World{
@@ -34,7 +35,7 @@ var (
 
 func init() {
 	var err error
-	gopherImage, _, err = ebitenutil.NewImageFromFile("asset/gopher.png", ebiten.FilterDefault)
+	gopherImage, _, err = ebitenutil.NewImageFromFile("asset/ship.png", ebiten.FilterDefault)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -45,7 +46,7 @@ func init() {
 }
 
 func main() {
-	if err := ebiten.Run(update, 320, 200, 3, "Hello, world!"); err != nil {
+	if err := ebiten.Run(update, 320, 200, 2, "Hello, world!"); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -55,6 +56,11 @@ func update(screen *ebiten.Image) error {
 	if ebiten.IsKeyPressed(ebiten.KeyEscape) || ebiten.IsKeyPressed(ebiten.KeyQ) {
 		os.Exit(0)
 	}
+
+	//if ebiten.IsKeyPressed(ebiten.KeyF) {
+	//	world.fullscreen = !world.fullscreen
+	//	ebiten.SetFullscreen(world.fullscreen)
+	//}
 
 	// Check for gamepad movement.
 	hv := ebiten.GamepadAxis(0, 0)
@@ -71,6 +77,9 @@ func update(screen *ebiten.Image) error {
 	} else {
 		world.accStarted += 0.1
 	}
+
+	hs := ebiten.GamepadAxis(0, 2)
+	vs := ebiten.GamepadAxis(0, 3)
 
 	// Update state.
 	world.frame++
@@ -98,12 +107,21 @@ func update(screen *ebiten.Image) error {
 	op := &ebiten.DrawImageOptions{}
 	w, h := gopherImage.Size()
 	op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
-	op.GeoM.Rotate(float64(world.frame) * 0.01)
+	//op.GeoM.Rotate(float64(world.frame) * 0.01)
 	op.GeoM.Scale(0.2, 0.2)
 	op.GeoM.Translate(world.x, world.y)
 	screen.DrawImage(gopherImage, op)
 
 	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("0: %0.6f, 1: %0.6f", hv, vv), 0, 12)
+
+	// Move after check for draw.
+	if math.Abs(hs) > 0.20 || math.Abs(vs) > 0.20 {
+		fmt.Println(hs, vs)
+		lineLen := 1000.0
+		dx := world.x + lineLen*hs
+		dy := world.y + lineLen*vs
+		ebitenutil.DrawLine(screen, world.x, world.y, dx, dy, color.RGBA{255, 255, 0, 255})
+	}
 
 	return nil
 }
