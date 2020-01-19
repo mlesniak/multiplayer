@@ -20,6 +20,15 @@ func draw(screen *ebiten.Image) {
 	//a := b.Max.X.Ceil()
 	//text.Draw(screen, msg, arcadeFont, globalConfig.width/2-a/2, 30, color.Black)
 
+	for _, obstacle := range state.obstacles {
+		op := &ebiten.DrawImageOptions{}
+		w, h := obstacleImage.Size()
+		op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
+		op.GeoM.Scale(0.3, 0.3)
+		op.GeoM.Translate(obstacle.x, obstacle.y)
+		screen.DrawImage(obstacleImage, op)
+	}
+
 	op := &ebiten.DrawImageOptions{}
 	w, h := gopherImage.Size()
 	op.GeoM.Translate(-float64(w)/2, -float64(h)/2)

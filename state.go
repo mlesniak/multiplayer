@@ -11,8 +11,11 @@ type State struct {
 	// Input
 	hv, vv, hs, vs float64
 
-	// Players
-	players []Player
+	// Objects
+	players   []Player
+	obstacles []Obstacle
+
+	// Obstacles
 
 	// Timing
 	timer    time.Time
@@ -23,17 +26,32 @@ var state = State{
 	timer: time.Now(),
 }
 
+type Player struct {
+	x, y  float64
+	angle float64
+}
+
+type Obstacle struct {
+	x, y          float64
+	width, height float64
+}
+
 func init() {
 	state.players = make([]Player, 2)
 	pl0 := &state.players[0]
 	pl0.x = 400
 	pl0.y = 200
 	pl0.angle = 0
-}
 
-type Player struct {
-	x, y  float64
-	angle float64
+	state.obstacles = make([]Obstacle, 1)
+	state.obstacles = []Obstacle{
+		{
+			x:      600,
+			y:      200,
+			width:  50,
+			height: 50,
+		},
+	}
 }
 
 func updateState() {
