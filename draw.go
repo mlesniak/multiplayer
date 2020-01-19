@@ -11,17 +11,18 @@ import (
 )
 
 func draw(screen *ebiten.Image) {
-	// Move after check for draw.
 	if math.Abs(state.hs) > 0.20 || math.Abs(state.vs) > 0.20 {
 		dx := state.x + globalConfig.lineLen*state.hs
 		dy := state.y + globalConfig.lineLen*state.vs
 		ebitenutil.DrawLine(screen, state.x, state.y, dx, dy, color.RGBA{255, 255, 0, 255})
 	}
 
+	ebitenutil.DrawRect(screen, 0, 0, float64(globalConfig.width), 40, color.RGBA{255, 255, 0, 255})
+
 	msg := fmt.Sprintf("--- %.2f ---", float64(state.msPassed)/1000.0)
 	b, _ := font.BoundString(arcadeFont, msg)
 	a := b.Max.X.Ceil()
-	text.Draw(screen, msg, arcadeFont, globalConfig.width/2-a/2, 30, color.White)
+	text.Draw(screen, msg, arcadeFont, globalConfig.width/2-a/2, 30, color.Black)
 
 	op := &ebiten.DrawImageOptions{}
 	w, h := gopherImage.Size()
