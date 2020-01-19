@@ -16,6 +16,7 @@ type World struct {
 
 	// Position of gopher.
 	x, y       float64
+	ax, ay     float64
 	angle      float64
 	acc        float64
 	accStarted float64
@@ -41,8 +42,8 @@ func init() {
 		log.Fatal(err)
 	}
 
-	world.x = 160
-	world.y = 100
+	world.x = 400
+	world.y = 300
 	world.acc = 0
 }
 
@@ -58,62 +59,64 @@ func update(screen *ebiten.Image) error {
 		os.Exit(0)
 	}
 
-	//if ebiten.IsKeyPressed(ebiten.KeyF) {
-	//	world.fullscreen = !world.fullscreen
-	//	ebiten.SetFullscreen(world.fullscreen)
-	//}
-
 	// Check for gamepad movement.
 	hv := ebiten.GamepadAxis(0, 0)
 	vv := ebiten.GamepadAxis(0, 1)
-	acc := 15.0
-	if math.Abs(hv) > 0.10 {
-		world.x += hv * acc
-	}
-	if math.Abs(vv) > 0.10 {
-		world.y += vv * acc
-	}
-	if math.Abs(hv) <= 0.10 && math.Abs(vv) <= 0.10 {
-		world.accStarted = 0.0
-	} else {
-		world.accStarted += 0.1
-	}
-
 	hs := ebiten.GamepadAxis(0, 2)
 	vs := ebiten.GamepadAxis(0, 3)
 
-	// Update state.
-	world.frame++
-	if world.a == 255 || world.a == 0 {
-		world.up = !world.up
-	}
-	if world.up {
-		world.a++
-	} else {
-		world.a--
-	}
-
-	if ebiten.IsDrawingSkipped() {
-		return nil
+	var offsetX, offsetY float64
+	acc := 1.0
+	if math.Abs(hv) > 0.20 || math.Abs(vv) > 0.20 {
+		offsetX = hv*math.Cos(world.angle) + vv*math.Sin(world.angle)
+		offsetY = -hv*math.Sin(world.angle) + vv*math.Cos(world.angle)
+		world.x = world.x + (offsetX * acc)
+		world.y = world.y + (offsetY * acc)
 	}
 
 	lineLen := 1000.0
 	dx := world.x + lineLen*hs
 	dy := world.y + lineLen*vs
 
+	//if math.Abs(hs) > 0.20 || math.Abs(vs) > 0.20 {
+	//	world.angle = math.Atan2(dy-world.y, dx-world.x) + math.Pi/2
+	//}
+
+	world.ax = hv * hs
+	world.x += world.ax
+
+	//if math.Abs(hv) > 0.10 {
+	//	world.x += hv*acc + hs
+	//}
+	//if math.Abs(vv) > 0.10 {
+	//	world.y += vv*acc + vs
+	//}
+	//if math.Abs(hv) <= 0.10 && math.Abs(vv) <= 0.10 {
+	//	world.accStarted = 0.0
+	//} else {
+	//	world.accStarted += 0.1
+	//}
+
+	world.frame++
+
+	if ebiten.IsDrawingSkipped() {
+		return nil
+	}
+
 	// Move after check for draw.
 	if math.Abs(hs) > 0.20 || math.Abs(vs) > 0.20 {
 		world.angle = math.Atan2(dy-world.y, dx-world.x) + math.Pi/2
 		ebitenutil.DrawLine(screen, world.x, world.y, dx, dy, color.RGBA{255, 255, 0, 255})
 	}
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("hs=%.3g, vs=%.3g, angle=%.3g", hs, vs, world.angle))
+	//ebitenutil.DebugPrint(screen, fmt.Sprintf("hs=%.3g, vs=%.3g, angle=%.3g", hs, vs, world.angle))
+	ebitenutil.DebugPrint(screen, fmt.Sprintf("ox=%.3g oy=%.3g", offsetX, offsetY))
+	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("%.3f", world.angle*180/math.Pi), int(world.x+20), int(world.y+20))
 
 	op := &ebiten.DrawImageOptions{}
 	w, h := gopherImage.Size()
 	op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
 	op.GeoM.Rotate(world.angle)
-	//op.GeoM.Rotate(float64(world.frame) * 0.01)
-	op.GeoM.Scale(0.2, 0.2)
+	op.GeoM.Scale(0.1, 0.1)
 	op.GeoM.Translate(world.x, world.y)
 	screen.DrawImage(gopherImage, op)
 
