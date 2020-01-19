@@ -2,10 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/golang/freetype/truetype"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
-	"github.com/hajimehoshi/ebiten/examples/resources/fonts"
 	"github.com/hajimehoshi/ebiten/text"
 	"golang.org/x/image/font"
 	"image/color"
@@ -14,60 +12,6 @@ import (
 	"os"
 	"time"
 )
-
-type World struct {
-	a  uint8
-	up bool
-
-	// Position of gopher.
-	x, y       float64
-	ax, ay     float64
-	angle      float64
-	acc        float64
-	accStarted float64
-
-	frame      int64
-	fullscreen bool
-
-	timer time.Time
-}
-
-var world = World{
-	// Empty for now.
-}
-
-var gopherImage *ebiten.Image
-
-var (
-	gamepadIDs = map[int]struct{}{}
-)
-
-var arcadeFont font.Face
-
-func init() {
-	var err error
-	gopherImage, _, err = ebitenutil.NewImageFromFile("asset/zera.png", ebiten.FilterDefault)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	world.x = 400
-	world.y = 300
-	world.acc = 0
-	world.timer = time.Now()
-
-	tt, err := truetype.Parse(fonts.ArcadeN_ttf)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	const dpi = 72
-	arcadeFont = truetype.NewFace(tt, &truetype.Options{
-		Size:    24,
-		DPI:     dpi,
-		Hinting: font.HintingFull,
-	})
-}
 
 func main() {
 	if err := ebiten.Run(update, globalConfig.width, globalConfig.height, 1, "Hello, world!"); err != nil {
