@@ -15,7 +15,9 @@ type World struct {
 	up bool
 
 	// Position of gopher.
-	x, y float64
+	x, y       float64
+	acc        float64
+	accStarted float64
 
 	frame int64
 }
@@ -39,6 +41,7 @@ func init() {
 
 	world.x = 160
 	world.y = 100
+	world.acc = 0
 }
 
 func main() {
@@ -56,11 +59,17 @@ func update(screen *ebiten.Image) error {
 	// Check for gamepad movement.
 	hv := ebiten.GamepadAxis(0, 0)
 	vv := ebiten.GamepadAxis(0, 1)
+	acc := 10.0
 	if math.Abs(hv) > 0.10 {
-		world.x += hv
+		world.x += hv * acc
 	}
 	if math.Abs(vv) > 0.10 {
-		world.y += vv
+		world.y += vv * acc
+	}
+	if math.Abs(hv) <= 0.10 && math.Abs(vv) <= 0.10 {
+		world.accStarted = 0.0
+	} else {
+		world.accStarted += 0.1
 	}
 
 	// Update state.
