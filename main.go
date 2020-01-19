@@ -37,7 +37,7 @@ var (
 
 func init() {
 	var err error
-	gopherImage, _, err = ebitenutil.NewImageFromFile("asset/ship.png", ebiten.FilterDefault)
+	gopherImage, _, err = ebitenutil.NewImageFromFile("asset/zera.png", ebiten.FilterDefault)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -66,36 +66,36 @@ func update(screen *ebiten.Image) error {
 	vs := ebiten.GamepadAxis(0, 3)
 
 	var offsetX, offsetY float64
-	acc := 1.0
-	if math.Abs(hv) > 0.20 || math.Abs(vv) > 0.20 {
-		offsetX = hv*math.Cos(world.angle) + vv*math.Sin(world.angle)
-		offsetY = -hv*math.Sin(world.angle) + vv*math.Cos(world.angle)
-		world.x = world.x + (offsetX * acc)
-		world.y = world.y + (offsetY * acc)
-	}
+	acc := 15.0
+	//if math.Abs(hv) > 0.20 || math.Abs(vv) > 0.20 {
+	//	offsetX = hv*math.Cos(world.angle) + vv*math.Sin(world.angle)
+	//	offsetY = -hv*math.Sin(world.angle) + vv*math.Cos(world.angle)
+	//	world.x = world.x + (offsetX * acc)
+	//	world.y = world.y + (offsetY * acc)
+	//}
 
 	lineLen := 1000.0
 	dx := world.x + lineLen*hs
 	dy := world.y + lineLen*vs
 
-	//if math.Abs(hs) > 0.20 || math.Abs(vs) > 0.20 {
-	//	world.angle = math.Atan2(dy-world.y, dx-world.x) + math.Pi/2
-	//}
+	if math.Abs(hs) > 0.20 || math.Abs(vs) > 0.20 {
+		world.angle = math.Atan2(dy-world.y, dx-world.x) + math.Pi/2
+	}
 
 	world.ax = hv * hs
 	world.x += world.ax
 
-	//if math.Abs(hv) > 0.10 {
-	//	world.x += hv*acc + hs
-	//}
-	//if math.Abs(vv) > 0.10 {
-	//	world.y += vv*acc + vs
-	//}
-	//if math.Abs(hv) <= 0.10 && math.Abs(vv) <= 0.10 {
-	//	world.accStarted = 0.0
-	//} else {
-	//	world.accStarted += 0.1
-	//}
+	if math.Abs(hv) > 0.10 {
+		world.x += hv*acc + hs
+	}
+	if math.Abs(vv) > 0.10 {
+		world.y += vv*acc + vs
+	}
+	if math.Abs(hv) <= 0.10 && math.Abs(vv) <= 0.10 {
+		world.accStarted = 0.0
+	} else {
+		world.accStarted += 0.1
+	}
 
 	world.frame++
 
@@ -115,7 +115,7 @@ func update(screen *ebiten.Image) error {
 	op := &ebiten.DrawImageOptions{}
 	w, h := gopherImage.Size()
 	op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
-	op.GeoM.Rotate(world.angle)
+	//op.GeoM.Rotate(world.angle)
 	op.GeoM.Scale(0.1, 0.1)
 	op.GeoM.Translate(world.x, world.y)
 	screen.DrawImage(gopherImage, op)
