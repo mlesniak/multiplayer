@@ -2,12 +2,17 @@ package main
 
 import (
 	"fmt"
+	"github.com/golang/freetype/truetype"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
+	"github.com/hajimehoshi/ebiten/examples/resources/fonts"
+	"github.com/hajimehoshi/ebiten/text"
+	"golang.org/x/image/font"
 	"image/color"
 	"log"
 	"math"
 	"os"
+	"time"
 )
 
 type World struct {
@@ -23,6 +28,8 @@ type World struct {
 
 	frame      int64
 	fullscreen bool
+
+	timer time.Time
 }
 
 var world = World{
@@ -35,6 +42,8 @@ var (
 	gamepadIDs = map[int]struct{}{}
 )
 
+var mplusNormalFont font.Face
+
 func init() {
 	var err error
 	gopherImage, _, err = ebitenutil.NewImageFromFile("asset/zera.png", ebiten.FilterDefault)
@@ -45,6 +54,19 @@ func init() {
 	world.x = 400
 	world.y = 300
 	world.acc = 0
+	world.timer = time.Now()
+
+	tt, err := truetype.Parse(fonts.MPlus1pRegular_ttf)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	const dpi = 72
+	mplusNormalFont = truetype.NewFace(tt, &truetype.Options{
+		Size:    24,
+		DPI:     dpi,
+		Hinting: font.HintingFull,
+	})
 }
 
 func main() {
@@ -99,6 +121,12 @@ func update(screen *ebiten.Image) error {
 
 	world.frame++
 
+	msPassed := time.Now().Sub(world.timer).Milliseconds()
+	if msPassed > 5000 {
+		world.timer = time.Now()
+	}
+
+	// --------------------------------------------------------------------------------------------------------------------
 	if ebiten.IsDrawingSkipped() {
 		return nil
 	}
@@ -111,6 +139,9 @@ func update(screen *ebiten.Image) error {
 	//ebitenutil.DebugPrint(screen, fmt.Sprintf("hs=%.3g, vs=%.3g, angle=%.3g", hs, vs, world.angle))
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("ox=%.3g oy=%.3g", offsetX, offsetY))
 	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("%.3f", world.angle*180/math.Pi), int(world.x+20), int(world.y+20))
+
+	msg := fmt.Sprintf("Seconds passed: %.2f", float64(msPassed)/1000.0)
+	text.Draw(screen, msg, mplusNormalFont, 0, 40, color.White)
 
 	op := &ebiten.DrawImageOptions{}
 	w, h := gopherImage.Size()
