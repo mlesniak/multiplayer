@@ -21,6 +21,7 @@ type State struct {
 	timer    time.Time
 	msPassed int64
 	frames   int64
+	pause    bool
 }
 
 var state = State{
@@ -61,6 +62,12 @@ func updateState() {
 	// Check for key presses.
 	if ebiten.IsKeyPressed(ebiten.KeyEscape) || ebiten.IsKeyPressed(ebiten.KeyQ) {
 		os.Exit(0)
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyP) {
+		state.pause = !state.pause
+	}
+	if state.pause {
+		return
 	}
 
 	// Check for gamepad movement.

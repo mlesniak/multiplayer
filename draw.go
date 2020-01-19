@@ -8,6 +8,10 @@ import (
 )
 
 func draw(screen *ebiten.Image) {
+	if state.pause {
+		ebitenutil.DebugPrint(screen, "<PAUSED>")
+	}
+
 	if math.Abs(state.hs) > 0.20 || math.Abs(state.vs) > 0.20 {
 		dx := state.players[0].x + globalConfig.lineLen*state.hs
 		dy := state.players[0].y + globalConfig.lineLen*state.vs
