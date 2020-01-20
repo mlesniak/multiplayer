@@ -6,6 +6,8 @@ import (
 )
 
 func main() {
+	//ebiten.SetMaxTPS(5)
+
 	if err := ebiten.Run(update, globalConfig.width, globalConfig.height, 1, "Game"); err != nil {
 		log.Fatal(err)
 	}

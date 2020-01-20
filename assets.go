@@ -8,6 +8,7 @@ import (
 
 var gopherImage *ebiten.Image
 var obstacleImage *ebiten.Image
+var obstacleHitImage *ebiten.Image
 
 func init() {
 	var err error
@@ -17,6 +18,11 @@ func init() {
 	}
 
 	obstacleImage, _, err = ebitenutil.NewImageFromFile("asset/blue.png", ebiten.FilterDefault)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	obstacleHitImage, _, err = ebitenutil.NewImageFromFile("asset/blue-hit.png", ebiten.FilterDefault)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -17,7 +17,7 @@ var globalConfig = Config{
 	width:  800,
 	height: 300,
 
-	lineLen: 1000,
+	lineLen: 250,
 
 	roundDuration: 3,
 }

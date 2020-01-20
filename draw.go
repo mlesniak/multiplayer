@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"image/color"
@@ -26,10 +27,15 @@ func draw(screen *ebiten.Image) {
 
 	for _, obstacle := range state.obstacles {
 		op := &ebiten.DrawImageOptions{}
-		op.GeoM.Translate(-obstacle.width/2, -obstacle.height/2)
+		w, h := obstacleImage.Size()
+		op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
 		//op.GeoM.Scale(0.3, 0.3)
 		op.GeoM.Translate(obstacle.x, obstacle.y)
-		screen.DrawImage(obstacleImage, op)
+		if !obstacle.hit {
+			screen.DrawImage(obstacleImage, op)
+		} else {
+			screen.DrawImage(obstacleHitImage, op)
+		}
 	}
 
 	op := &ebiten.DrawImageOptions{}
@@ -39,4 +45,9 @@ func draw(screen *ebiten.Image) {
 	op.GeoM.Scale(0.3, 0.3)
 	op.GeoM.Translate(state.players[0].x, state.players[0].y)
 	screen.DrawImage(gopherImage, op)
+
+	px, py := ebiten.CursorPosition()
+	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("%v/%v", px, py), 0, 20)
+	ebitenutil.DrawLine(screen, float64(px), 0, float64(px), float64(globalConfig.height), color.RGBA{40, 40, 40, 255})
+	ebitenutil.DrawLine(screen, 0, float64(py), float64(globalConfig.width), float64(py), color.RGBA{40, 40, 40, 255})
 }
