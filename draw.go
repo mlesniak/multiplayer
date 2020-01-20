@@ -63,8 +63,7 @@ func drawPlayer(screen *ebiten.Image) {
 	scaleX := w / float64(iw)
 	scaleY := h / float64(ih)
 	op.GeoM.Scale(scaleX, scaleY)
-	// TODO Compute scale using width and imageSize
-	op.GeoM.Translate(state.players[0].x, state.players[0].y)
+	op.GeoM.Translate(state.players[0].x-w/2, state.players[0].y-h/2)
 	screen.DrawImage(playerImage, op)
 }
 

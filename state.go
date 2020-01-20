@@ -93,9 +93,9 @@ func updateState() {
 }
 
 func updatePlayerPosition() {
-	//p := state.players[0]
-	//prevX := p.x
-	//prevY := p.y
+	p := state.players[0]
+	prevX := p.x
+	prevY := p.y
 
 	acc := 15.0
 	if math.Abs(state.hv) > 0.10 {
@@ -106,18 +106,19 @@ func updatePlayerPosition() {
 	}
 
 	// Check if one of the corners collides with one of the obstacles. If yes, reset to previous position.
-	//for i, _ := range state.obstacles {
-	//	c1x := state.players[0].x - state.players[0].
-	//
-	//	if state.obstacles[i].inside(tx, ty) {
-	//		if show {
-	//			fmt.Printf("tx=%v ty=%v\n", tx, ty)
-	//		}
-	//		state.obstacles[i].hit = true
-	//		state.players[0].lineLength = ll
-	//		break loop
-	//	}
-	//}
+	c1x := state.players[0].x - state.players[0].width
+	c1y := state.players[0].y - state.players[0].height
+	collision := false
+	for i, _ := range state.obstacles {
+		if state.obstacles[i].inside(c1x, c1y) {
+			collision = true
+			break
+		}
+	}
+	if collision {
+		state.players[0].x = prevX
+		state.players[0].y = prevY
+	}
 }
 
 func updateInternalState() {
