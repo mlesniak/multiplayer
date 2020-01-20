@@ -1,4 +1,3 @@
-// TODO Compute new line length
 // TODO Refactor into multiple files under state/
 package main
 
@@ -32,8 +31,9 @@ var state = State{
 }
 
 type Player struct {
-	x, y  float64 // center
-	angle float64
+	x, y       float64 // center
+	angle      float64
+	lineLength float64
 }
 
 // Currently, only rectangular obstacles (and players)
@@ -49,6 +49,7 @@ func init() {
 	pl0.x = 400
 	pl0.y = 200
 	pl0.angle = 0
+	pl0.lineLength = globalConfig.lineLen
 
 	state.obstacles = make([]Obstacle, 1)
 	w, h := obstacleImage.Size()
@@ -133,6 +134,7 @@ func updateHit() {
 	dx := math.Sin(p.angle)
 	dy := math.Cos(p.angle)
 
+	state.players[0].lineLength = globalConfig.lineLen
 loop:
 	for ll := 1.0; ll < globalConfig.lineLen; ll++ {
 		tx := p.x + ll*dx
@@ -146,6 +148,7 @@ loop:
 				}
 
 				state.obstacles[i].hit = true
+				state.players[0].lineLength = ll
 				break loop
 			}
 		}
