@@ -36,6 +36,8 @@ type Player struct {
 	x, y       float64 // center
 	angle      float64
 	lineLength float64
+
+	width, height float64
 }
 
 // Currently, only rectangular obstacles (and players)
@@ -46,10 +48,13 @@ type Obstacle struct {
 }
 
 func init() {
+	//wp, hp := playerImage.Size()
 	state.players = make([]Player, 2)
 	pl0 := &state.players[0]
 	pl0.x = 400
 	pl0.y = 200
+	pl0.width = 20
+	pl0.height = 20
 	pl0.angle = 0
 	pl0.lineLength = globalConfig.lineLen
 
@@ -88,6 +93,10 @@ func updateState() {
 }
 
 func updatePlayerPosition() {
+	//p := state.players[0]
+	//prevX := p.x
+	//prevY := p.y
+
 	acc := 15.0
 	if math.Abs(state.hv) > 0.10 {
 		state.players[0].x += state.hv*acc + state.hs
@@ -95,6 +104,20 @@ func updatePlayerPosition() {
 	if math.Abs(state.vv) > 0.10 {
 		state.players[0].y += state.vv*acc + state.vs
 	}
+
+	// Check if one of the corners collides with one of the obstacles. If yes, reset to previous position.
+	//for i, _ := range state.obstacles {
+	//	c1x := state.players[0].x - state.players[0].
+	//
+	//	if state.obstacles[i].inside(tx, ty) {
+	//		if show {
+	//			fmt.Printf("tx=%v ty=%v\n", tx, ty)
+	//		}
+	//		state.obstacles[i].hit = true
+	//		state.players[0].lineLength = ll
+	//		break loop
+	//	}
+	//}
 }
 
 func updateInternalState() {

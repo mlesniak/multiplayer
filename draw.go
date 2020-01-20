@@ -45,7 +45,6 @@ func drawObstacles(screen *ebiten.Image) {
 		op := &ebiten.DrawImageOptions{}
 		w, h := obstacleImage.Size()
 		op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
-		//op.GeoM.Scale(0.3, 0.3)
 		op.GeoM.Translate(obstacle.x, obstacle.y)
 		if !obstacle.hit {
 			screen.DrawImage(obstacleImage, op)
@@ -57,10 +56,14 @@ func drawObstacles(screen *ebiten.Image) {
 
 func drawPlayer(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
-	w, h := playerImage.Size()
-	op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
+	w, h := state.players[0].width, state.players[0].height
+	op.GeoM.Translate(-w/2, -h/2)
 	//op.GeoM.Rotate(state.angle)
-	op.GeoM.Scale(0.3, 0.3)
+	iw, ih := playerImage.Size()
+	scaleX := w / float64(iw)
+	scaleY := h / float64(ih)
+	op.GeoM.Scale(scaleX, scaleY)
+	// TODO Compute scale using width and imageSize
 	op.GeoM.Translate(state.players[0].x, state.players[0].y)
 	screen.DrawImage(playerImage, op)
 }
