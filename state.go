@@ -93,49 +93,53 @@ func updateState() {
 }
 
 func updatePlayerPosition() {
-	p := state.players[0]
-	prevX := p.x
-	prevY := p.y
-
 	acc := 15.0
-	if math.Abs(state.hv) > 0.10 {
-		state.players[0].x += state.hv*acc + state.hs
-	}
-	if math.Abs(state.vv) > 0.10 {
-		state.players[0].y += state.vv*acc + state.vs
+	steps := 10
+	dx := (state.hv*acc + state.hs) / float64(steps)
+	dy := (state.vv*acc + state.vs) / float64(steps)
+
+	collision := false
+	i := 0
+loop:
+	for ; i < steps; i++ {
+		if math.Abs(state.hv) > 0.10 {
+			state.players[0].x += dx
+		}
+		if math.Abs(state.vv) > 0.10 {
+			state.players[0].y += dy
+		}
+
+		// Check if one of the corners collides with one of the obstacles. If yes, reset to previous position.
+		c1x := state.players[0].x - state.players[0].width/2
+		c1y := state.players[0].y - state.players[0].height/2
+		c2x := state.players[0].x + state.players[0].width/2
+		c2y := state.players[0].y + state.players[0].height/2
+		c3x := state.players[0].x + state.players[0].width/2
+		c3y := state.players[0].y - state.players[0].height/2
+		c4x := state.players[0].x - state.players[0].width/2
+		c4y := state.players[0].y + state.players[0].height/2
+		for i, _ := range state.obstacles {
+			if state.obstacles[i].inside(c1x, c1y) {
+				collision = true
+				break loop
+			}
+			if state.obstacles[i].inside(c2x, c2y) {
+				collision = true
+				break loop
+			}
+			if state.obstacles[i].inside(c3x, c3y) {
+				collision = true
+				break loop
+			}
+			if state.obstacles[i].inside(c4x, c4y) {
+				collision = true
+				break loop
+			}
+		}
 	}
 
-	// Check if one of the corners collides with one of the obstacles. If yes, reset to previous position.
-	c1x := state.players[0].x - state.players[0].width/2
-	c1y := state.players[0].y - state.players[0].height/2
-	c2x := state.players[0].x + state.players[0].width/2
-	c2y := state.players[0].y + state.players[0].height/2
-	c3x := state.players[0].x + state.players[0].width/2
-	c3y := state.players[0].y - state.players[0].height/2
-	c4x := state.players[0].x - state.players[0].width/2
-	c4y := state.players[0].y + state.players[0].height/2
-	collision := false
-	for i, _ := range state.obstacles {
-		if state.obstacles[i].inside(c1x, c1y) {
-			collision = true
-			break
-		}
-		if state.obstacles[i].inside(c2x, c2y) {
-			collision = true
-			break
-		}
-		if state.obstacles[i].inside(c3x, c3y) {
-			collision = true
-			break
-		}
-		if state.obstacles[i].inside(c4x, c4y) {
-			collision = true
-			break
-		}
-	}
 	if collision {
-		state.players[0].x = prevX
-		state.players[0].y = prevY
+
 	}
 }
 
