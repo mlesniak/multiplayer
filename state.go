@@ -106,11 +106,29 @@ func updatePlayerPosition() {
 	}
 
 	// Check if one of the corners collides with one of the obstacles. If yes, reset to previous position.
-	c1x := state.players[0].x - state.players[0].width
-	c1y := state.players[0].y - state.players[0].height
+	c1x := state.players[0].x - state.players[0].width/2
+	c1y := state.players[0].y - state.players[0].height/2
+	c2x := state.players[0].x + state.players[0].width/2
+	c2y := state.players[0].y + state.players[0].height/2
+	c3x := state.players[0].x + state.players[0].width/2
+	c3y := state.players[0].y - state.players[0].height/2
+	c4x := state.players[0].x - state.players[0].width/2
+	c4y := state.players[0].y + state.players[0].height/2
 	collision := false
 	for i, _ := range state.obstacles {
 		if state.obstacles[i].inside(c1x, c1y) {
+			collision = true
+			break
+		}
+		if state.obstacles[i].inside(c2x, c2y) {
+			collision = true
+			break
+		}
+		if state.obstacles[i].inside(c3x, c3y) {
+			collision = true
+			break
+		}
+		if state.obstacles[i].inside(c4x, c4y) {
 			collision = true
 			break
 		}
