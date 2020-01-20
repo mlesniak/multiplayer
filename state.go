@@ -53,6 +53,7 @@ func init() {
 	pl0.angle = 0
 	pl0.lineLength = globalConfig.lineLen
 
+	rand.Seed(time.Now().Unix())
 	numObstacles := 10
 	state.obstacles = make([]Obstacle, numObstacles)
 	w, h := obstacleImage.Size()
@@ -123,8 +124,8 @@ func handleInput() {
 
 	// - Simulate gamepad input ----------------------------------------------------------------------
 	//state.hs = 1.0
-	state.hs = math.Cos(0.01 * float64(state.frames))
-	state.vs = math.Sin(0.01 * float64(state.frames))
+	state.hs = math.Cos(0.05 * float64(state.frames))
+	state.vs = math.Sin(0.05 * float64(state.frames))
 	//state.vs = 0.0
 	// -----------------------------------------------------------------------------------------------
 }
