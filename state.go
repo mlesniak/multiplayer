@@ -181,8 +181,8 @@ func handleInput() {
 
 	// - Simulate gamepad input ----------------------------------------------------------------------
 	//state.hs = 1.0
-	state.hs = math.Cos(0.05 * float64(state.frames))
-	state.vs = math.Sin(0.05 * float64(state.frames))
+	//state.hs = math.Cos(0.05 * float64(state.frames))
+	//state.vs = math.Sin(0.05 * float64(state.frames))
 	//state.vs = 0.0
 	// -----------------------------------------------------------------------------------------------
 }
