@@ -15,7 +15,7 @@ type Config struct {
 
 var globalConfig = Config{
 	width:  800,
-	height: 300,
+	height: 500,
 
 	lineLen: 1000,
 

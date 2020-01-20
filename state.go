@@ -151,7 +151,7 @@ func updateHit() {
 
 	state.players[0].lineLength = globalConfig.lineLen
 loop:
-	for ll := 1.0; ll < globalConfig.lineLen; ll++ {
+	for ll := 1.0; ll < globalConfig.lineLen; ll += 1.00 {
 		tx := p.x + ll*dx
 		ty := p.y + ll*dy
 		// Check all objects.

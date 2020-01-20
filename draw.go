@@ -15,7 +15,7 @@ func draw(screen *ebiten.Image) {
 		ebitenutil.DebugPrint(screen, "<PAUSED>")
 	}
 
-	drawTimer(screen)
+	//drawTimer(screen)
 	drawObstacles(screen)
 	drawShot(screen)
 	drawPlayer(screen)
@@ -68,6 +68,7 @@ func drawPlayer(screen *ebiten.Image) {
 func debugDrawPosition(screen *ebiten.Image) {
 	px, py := ebiten.CursorPosition()
 	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("%v/%v", px, py), 0, 20)
-	ebitenutil.DrawLine(screen, float64(px), 0, float64(px), float64(globalConfig.height), color.RGBA{40, 40, 40, 255})
-	ebitenutil.DrawLine(screen, 0, float64(py), float64(globalConfig.width), float64(py), color.RGBA{40, 40, 40, 255})
+	crossColor := color.RGBA{80, 80, 80, 255}
+	ebitenutil.DrawLine(screen, float64(px), 0, float64(px), float64(globalConfig.height), crossColor)
+	ebitenutil.DrawLine(screen, 0, float64(py), float64(globalConfig.width), float64(py), crossColor)
 }
