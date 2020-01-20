@@ -1,5 +1,5 @@
 // TODO Refactor into multiple files under state/
-// TODO Prevent collision with obstacles
+// TODO Prevent right and bottom pixel-gap on collision detection
 package main
 
 import (
@@ -94,7 +94,7 @@ func updateState() {
 
 func updatePlayerPosition() {
 	acc := 15.0
-	steps := 10
+	steps := int(acc) * 10
 	dx := (state.hv*acc + state.hs) / float64(steps)
 	dy := (state.vv*acc + state.vs) / float64(steps)
 
@@ -102,22 +102,24 @@ func updatePlayerPosition() {
 	i := 0
 loop:
 	for ; i < steps; i++ {
+		vx := state.players[0].x
+		vy := state.players[0].y
 		if math.Abs(state.hv) > 0.10 {
-			state.players[0].x += dx
+			vx += dx
 		}
 		if math.Abs(state.vv) > 0.10 {
-			state.players[0].y += dy
+			vy += dy
 		}
 
 		// Check if one of the corners collides with one of the obstacles. If yes, reset to previous position.
-		c1x := state.players[0].x - state.players[0].width/2
-		c1y := state.players[0].y - state.players[0].height/2
-		c2x := state.players[0].x + state.players[0].width/2
-		c2y := state.players[0].y + state.players[0].height/2
-		c3x := state.players[0].x + state.players[0].width/2
-		c3y := state.players[0].y - state.players[0].height/2
-		c4x := state.players[0].x - state.players[0].width/2
-		c4y := state.players[0].y + state.players[0].height/2
+		c1x := vx - state.players[0].width/2
+		c1y := vy - state.players[0].height/2
+		c2x := vx + state.players[0].width/2
+		c2y := vy + state.players[0].height/2
+		c3x := vx + state.players[0].width/2
+		c3y := vy - state.players[0].height/2
+		c4x := vx - state.players[0].width/2
+		c4y := vy + state.players[0].height/2
 		for i, _ := range state.obstacles {
 			if state.obstacles[i].inside(c1x, c1y) {
 				collision = true
@@ -136,6 +138,10 @@ loop:
 				break loop
 			}
 		}
+
+		// No collision. Update
+		state.players[0].x = vx
+		state.players[0].y = vy
 	}
 
 	if collision {
