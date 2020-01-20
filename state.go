@@ -2,7 +2,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/hajimehoshi/ebiten"
 	"math"
 	"os"
@@ -77,7 +76,6 @@ func updateState() {
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyP) {
 		state.pause = !state.pause
-		show = true
 	}
 	if state.pause {
 		return
@@ -121,8 +119,6 @@ func updateState() {
 	updateHit()
 }
 
-var show bool
-
 func updateHit() {
 	// Reset hit state
 	for i, _ := range state.obstacles {
@@ -142,11 +138,6 @@ loop:
 		// Check all objects.
 		for i, _ := range state.obstacles {
 			if state.obstacles[i].inside(tx, ty) {
-				if show {
-					fmt.Printf("%f		%f, %f\n", ll, tx, ty)
-					show = false
-				}
-
 				state.obstacles[i].hit = true
 				state.players[0].lineLength = ll
 				break loop
