@@ -6,13 +6,13 @@ import (
 	"log"
 )
 
-var gopherImage *ebiten.Image
+var playerImage *ebiten.Image
 var obstacleImage *ebiten.Image
 var obstacleHitImage *ebiten.Image
 
 func init() {
 	var err error
-	gopherImage, _, err = ebitenutil.NewImageFromFile("asset/red.png", ebiten.FilterDefault)
+	playerImage, _, err = ebitenutil.NewImageFromFile("asset/red.png", ebiten.FilterDefault)
 	if err != nil {
 		log.Fatal(err)
 	}
