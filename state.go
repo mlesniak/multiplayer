@@ -63,12 +63,16 @@ func init() {
 	state.obstacles = make([]Obstacle, numObstacles)
 	w, h := obstacleImage.Size()
 	for i := 0; i < numObstacles; i++ {
-		state.obstacles = append(state.obstacles, Obstacle{
+		obstacle := Obstacle{
 			x:      float64(rand.Intn(globalConfig.width)),
 			y:      float64(rand.Intn(globalConfig.height)),
 			width:  float64(w),
 			height: float64(h),
-		})
+		}
+		if obstacle.inside(pl0.x, pl0.y) {
+			continue
+		}
+		state.obstacles = append(state.obstacles, obstacle)
 	}
 }
 
@@ -169,10 +173,11 @@ func updateShootingAngle() {
 
 func handleInput() {
 	// Check for gamepad movement.
-	//state.hv = ebiten.GamepadAxis(0, 0) // Commented out for debugging with keyboard.
-	//state.vv = ebiten.GamepadAxis(0, 1)
-	//state.hs = ebiten.GamepadAxis(0, 2)
-	//state.vs = ebiten.GamepadAxis(0, 3)
+	// Commented out for debugging with keyboard.r
+	state.hv = ebiten.GamepadAxis(0, 0)
+	state.vv = ebiten.GamepadAxis(0, 1)
+	state.hs = ebiten.GamepadAxis(0, 2)
+	state.vs = ebiten.GamepadAxis(0, 3)
 
 	// - Simulate gamepad input ----------------------------------------------------------------------
 	//state.hs = 1.0
